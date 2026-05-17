@@ -58,7 +58,7 @@ export default function SignInForm() {
   }
 
   return (
-    <Card>
+    <Card className="w-full">
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <CardHeader className="flex flex-col items-center justify-center gap-3">
           <CardTitle>Entrar</CardTitle>
