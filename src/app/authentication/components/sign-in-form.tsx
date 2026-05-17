@@ -13,15 +13,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const formSchema = z.object({
-  email: z.email( "E-mail inválido" ),
-  password: z.string().min(8, "A senha deve ter pelo menos 8 caracteres" ),
+  email: z.email({ message: "E-mail inválido" }),
+  password: z.string().min(8, { message: "A senha deve ter pelo menos 8 caracteres" }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 export default function SignInForm() {
+  const router = useRouter();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -30,8 +34,27 @@ export default function SignInForm() {
     },
   });
 
-  function onSubmit(values: FormValues) {
-    console.log("Formulario valido e enviado!", values);
+  async function onSubmit(values: FormValues) {
+    await authClient.signIn.email({
+      email: values.email,
+      password: values.password,
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/");
+        },
+        onError: (ctx) => {
+          if (ctx.error.code === "INVALID_EMAIL_OR_PASSWORD") {
+            toast.error("E-mail ou senha inválidos", { position: "top-center" });
+            form.setError("email", { message: "E-mail ou senha inválidos" });
+            form.setError("password", { message: "E-mail ou senha inválidos" });
+          } else if (ctx.error.code === "USER_NOT_FOUND") {
+            toast.error("Usuário não encontrado", { position: "top-center" });
+            form.setError("email", { message: "Nenhuma conta encontrada com este e-mail" });
+          } else {
+            toast.error("Ocorreu um erro inesperado. Tente novamente.", { position: "top-center" });
+          }
+        },
+      },});
   }
 
   return (
