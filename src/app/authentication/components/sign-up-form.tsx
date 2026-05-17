@@ -1,5 +1,10 @@
 "use client";
-import { Field, FieldDescription, FieldError, FieldLabel } from "@/components/ui/field";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field";
 import {
   Card,
   CardHeader,
@@ -14,20 +19,25 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { authClient } from "@/lib/auth-client";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const formSchema = z
   .object({
     name: z.string().trim().min(1, { message: "O nome deve ser completo." }),
     email: z.email({ message: "E-mail inválido" }),
-    password: z.string().refine(
-      (v) =>
-        v.length >= 8 &&
-        /[A-Z]/.test(v) &&
-        /[a-z]/.test(v) &&
-        /[0-9]/.test(v) &&
-        /[^A-Za-z0-9]/.test(v),
-      { message: "A senha não atende aos requisitos mínimos." }
-    ),
+    password: z
+      .string()
+      .refine(
+        (v) =>
+          v.length >= 8 &&
+          /[A-Z]/.test(v) &&
+          /[a-z]/.test(v) &&
+          /[0-9]/.test(v) &&
+          /[^A-Za-z0-9]/.test(v),
+        { message: "A senha não atende aos requisitos mínimos." },
+      ),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -38,6 +48,7 @@ const formSchema = z
 type FormValues = z.infer<typeof formSchema>;
 
 export default function SignUpForm() {
+  const router = useRouter();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -53,8 +64,26 @@ export default function SignUpForm() {
 
   const blockClipboard = (e: React.ClipboardEvent) => e.preventDefault();
 
-  function onSubmit(values: FormValues) {
-    console.log("Formulario valido e enviado!", values);
+  async function onSubmit(values: FormValues) {
+    const { error } = await authClient.signUp.email({
+      name: values.name,
+      email: values.email,
+      password: values.password,
+    });
+
+    if (error) {
+      if (error.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL") {
+        toast.error("E-mail já está em uso. Por favor, tente outro.", { position: "top-center" });
+      } else if (error.code === "UNABLE_TO_CREATE_USER") {
+        toast.error("Não foi possível criar a conta. Tente novamente.", { position: "top-center" });
+      } else {
+        toast.error("Ocorreu um erro inesperado. Tente novamente.", { position: "top-center" });
+      }
+      return;
+    }
+
+    router.push("/");
+    form.reset();
   }
 
   return (
@@ -112,14 +141,18 @@ export default function SignUpForm() {
                     placeholder="Digite sua senha"
                     aria-invalid={fieldState.invalid}
                     onFocus={() => setPasswordFocused(true)}
-                    onBlur={() => { setPasswordFocused(false); field.onBlur(); }}
+                    onBlur={() => {
+                      setPasswordFocused(false);
+                      field.onBlur();
+                    }}
                     onCopy={blockClipboard}
                     onPaste={blockClipboard}
                     onCut={blockClipboard}
                   />
                   {passwordFocused && (
                     <FieldDescription>
-                      Mínimo 8 caracteres, incluindo letras maiúsculas e minúsculas, um número e um caractere especial.
+                      Mínimo 8 caracteres, incluindo letras maiúsculas e
+                      minúsculas, um número e um caractere especial.
                     </FieldDescription>
                   )}
                   <FieldError>{fieldState.error?.message}</FieldError>
@@ -139,7 +172,10 @@ export default function SignUpForm() {
                     placeholder="Confirme sua senha"
                     aria-invalid={fieldState.invalid}
                     onFocus={() => setConfirmFocused(true)}
-                    onBlur={() => { setConfirmFocused(false); field.onBlur(); }}
+                    onBlur={() => {
+                      setConfirmFocused(false);
+                      field.onBlur();
+                    }}
                     onCopy={blockClipboard}
                     onPaste={blockClipboard}
                     onCut={blockClipboard}
