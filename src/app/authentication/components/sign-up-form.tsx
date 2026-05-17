@@ -73,11 +73,17 @@ export default function SignUpForm() {
 
     if (error) {
       if (error.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL") {
-        toast.error("E-mail já está em uso. Por favor, tente outro.", { position: "top-center" });
+        toast.error("E-mail já está em uso. Por favor, tente outro.", {
+          position: "top-center",
+        });
       } else if (error.code === "UNABLE_TO_CREATE_USER") {
-        toast.error("Não foi possível criar a conta. Tente novamente.", { position: "top-center" });
+        toast.error("Não foi possível criar a conta. Tente novamente.", {
+          position: "top-center",
+        });
       } else {
-        toast.error("Ocorreu um erro inesperado. Tente novamente.", { position: "top-center" });
+        toast.error("Ocorreu um erro inesperado. Tente novamente.", {
+          position: "top-center",
+        });
       }
       return;
     }

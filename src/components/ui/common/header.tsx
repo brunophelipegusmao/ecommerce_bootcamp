@@ -56,7 +56,7 @@ export default function Header() {
                     ):(
                        <div className='flex items-center justify-between'>
                         <h2 className='font-semibold'>Olá, faça seu login.</h2>
-                        <Button size="icon" variant="outline" asChild>
+                        <Button size="icon" variant="outline">
                             <Link href="/authentication">
                                 <LogInIcon />
                             </Link>
