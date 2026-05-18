@@ -14,15 +14,13 @@ export default function Header() {
   return (
     <header className="flex items-center justify-between p-5">
        <Link href="/">
-        <Image src="/logo.svg" alt="Logo" width={100} height={26.14}/>
+        <Image src="/logo.svg" alt="Logo" width={100} height={26.14} style={{ height: "auto" }}/>
          </Link>
      
      <div className='flex items-center'>
             <Sheet>
-                <SheetTrigger asChild>
-                    <Button variant="outline" size="icon">
-                        <MenuIcon/>
-                    </Button>
+                <SheetTrigger render={<Button variant="outline" size="icon" />}>
+                    <MenuIcon/>
                 </SheetTrigger>
                 <SheetContent>
                     <SheetHeader>
