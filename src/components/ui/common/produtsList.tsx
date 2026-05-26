@@ -13,8 +13,8 @@ interface ProductsListProps {
 export default function ProductsList({ title, products }: ProductsListProps) {
   return (
     <div className="space-y-6">
-      <h3 className="text-md px-5 font-semibold uppercase">{title}</h3>
-      <div className="flex w-full flex-row gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+      <h3 className="text-md px-5 font-semibold uppercase md:px-10">{title}</h3>
+      <div className="flex w-full flex-row gap-4 overflow-x-auto px-5 [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-4 md:overflow-x-visible md:px-10 lg:grid-cols-5 xl:grid-cols-6">
         {products.map((product) => (
           <ProductItem product={product} key={product.id} />
         ))}

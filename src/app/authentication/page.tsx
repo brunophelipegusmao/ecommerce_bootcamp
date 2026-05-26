@@ -8,8 +8,8 @@ export default function Authentication() {
     <>
     <Header />
 
-    <div className="flex w-full flex-col gap-6 p-5">
-      <Tabs defaultValue="account">
+    <div className="flex w-full flex-col items-center gap-6 p-5 md:min-h-[calc(100vh-80px)] md:justify-center">
+      <Tabs defaultValue="account" className="w-full max-w-md">
         <TabsList className="min-w-50 self-center">
           <TabsTrigger value="sign-in">Entrar</TabsTrigger>
           <TabsTrigger value="sign-up">Criar Conta</TabsTrigger>

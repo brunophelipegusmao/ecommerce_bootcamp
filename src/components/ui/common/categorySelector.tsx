@@ -8,7 +8,7 @@ interface CategorySelectorProps {
 export default function CategorySelector({ categories }: CategorySelectorProps) {
   return (
     <div className="rounded-3xl p-6 bg-chart-1">
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-6">
         {
             categories.map((category) => (
                 <Button key={category.id} variant='ghost' className="bg-card rounded-full font-semibold">{category.name}</Button>

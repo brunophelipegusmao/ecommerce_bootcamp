@@ -24,33 +24,33 @@ export default async function Home() {
     <>
       <Header />
 
-      <div className="space-y-6">
-        <div className="px-5">
+      <div className="mx-auto w-full max-w-7xl space-y-8 py-6">
+        <div className="px-5 md:px-10">
           <Image
             src="/banner-01.png"
             alt="Leve uma vida com estilo"
             height={0}
             width={0}
             sizes="100vw"
-            className="h-auto w-full"
+            className="h-auto w-full rounded-2xl"
             loading="eager"
           />
         </div>
 
         <ProductsList title="Mais vendidos" products={products} />
 
-        <div className="px-5">
+        <div className="px-5 md:px-10">
           <CategorySelector categories={categories} />
         </div>
 
-        <div className="px-5">
+        <div className="px-5 md:px-10">
           <Image
             src="/banner-02.png"
             alt="Leve uma vida com estilo"
             height={0}
             width={0}
             sizes="100vw"
-            className="h-auto w-full"
+            className="h-auto w-full rounded-2xl"
           />
         </div>
 
