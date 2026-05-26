@@ -12,6 +12,7 @@ import {
 import { authClient } from "../../lib/auth-client";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import Link from "next/link";
+import Cart from "./cart";
 
 export default function Header() {
   const { data: session } = authClient.useSession();
@@ -28,7 +29,7 @@ export default function Header() {
         />
       </Link>
 
-      <div className="flex items-center">
+      <div className="flex items-center gap-3">
         <Sheet>
           <SheetTrigger render={<Button variant="outline" size="icon" />}>
             <MenuIcon />
@@ -81,6 +82,7 @@ export default function Header() {
             </div>
           </SheetContent>
         </Sheet>
+        <Cart />
       </div>
     </header>
   );
