@@ -6,7 +6,7 @@ import CategorySelector from "@/components/ui/common/categorySelector";
 import { productTable } from "@/db/schema";
 import { desc } from "drizzle-orm";
 import Footer from "@/components/ui/common/footer";
-
+import MarkList from "@/components/ui/common/markList";
 
 export default async function Home() {
   const products = await db.query.productTable.findMany({
@@ -36,6 +36,8 @@ export default async function Home() {
             loading="eager"
           />
         </div>
+
+        <MarkList />
 
         <ProductsList title="Mais vendidos" products={products} />
 
