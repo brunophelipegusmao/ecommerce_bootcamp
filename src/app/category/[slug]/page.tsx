@@ -1,9 +1,9 @@
-import Header from "@/components/ui/common/header";
-import ProductItem from "@/components/ui/common/productItem";
+import Header from "@/components/common/header";
+import ProductItem from "@/components/common/productItem";
 import { db } from "@/db";
 import { categoryTable, productTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { text } from 'drizzle-orm/pg-core';
+import { text } from "drizzle-orm/pg-core";
 
 interface CategoryPageProps {
   params: Promise<{ slug: string }>;
@@ -30,7 +30,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         <h2>{category.name}</h2>
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {products.map((product) => (
-            <ProductItem key={product.id} product={product} textContainerClassname="w-full" />
+            <ProductItem
+              key={product.id}
+              product={product}
+              textContainerClassname="w-full"
+            />
           ))}
         </div>
       </div>

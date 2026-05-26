@@ -10,6 +10,7 @@
     "typescript",
     "typescriptreact"
   ],
+  "git.allowNoVerifyCommit": false,
   "editot.codeActonsOnSave": {
     "source.fixAll.eslint": "explicit"
   }

@@ -1,12 +1,12 @@
-import Header from "@/components/ui/common/header";
+import Header from "@/components/common/header";
 import Image from "next/image";
-import ProductsList from "@/components/ui/common/produtsList";
+import ProductsList from "@/components/common/produtsList";
 import { db } from "@/db";
-import CategorySelector from "@/components/ui/common/categorySelector";
+import CategorySelector from "@/components/common/categorySelector";
 import { productTable } from "@/db/schema";
 import { desc } from "drizzle-orm";
-import Footer from "@/components/ui/common/footer";
-import MarkList from "@/components/ui/common/markList";
+import Footer from "@/components/common/footer";
+import MarkList from "@/components/common/markList";
 
 export default async function Home() {
   const products = await db.query.productTable.findMany({

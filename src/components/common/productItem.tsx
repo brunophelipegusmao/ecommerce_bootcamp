@@ -16,7 +16,10 @@ export default function ProductItem({
 }: ProductItemProps) {
   const firstVariant = product.variants[0];
   return (
-    <Link href="/" className="flex max-w-37.5 flex-col gap-4 md:max-w-none">
+    <Link
+      href={`/product-variant/${firstVariant.slug}`}
+      className="flex max-w-37.5 flex-col gap-4 md:max-w-none"
+    >
       <Image
         src={firstVariant.imageUrl}
         alt={firstVariant.name}
