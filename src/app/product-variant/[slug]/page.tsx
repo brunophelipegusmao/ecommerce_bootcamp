@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import ProductsList from "@/components/common/produtsList";
 import Footer from "@/components/common/footer";
 import VariantSelector from "../components/variant-selector";
+import QuantitySelector from "../components/quantity-selector";
 
 interface ProductVariantPageProps {
   params: Promise<{ slug: string }>;
@@ -65,7 +66,9 @@ export default async function ProductVariantPage({
             </h3>
           </div>
         </div>
-        <div className="px-5">quantidade</div>
+        <div className="px-5">
+          <QuantitySelector />
+        </div>
         <div className="flex flex-col space-y-4 px-5">
           <Button className="rounded-full" variant="outline" size="lg">
             Comprar agora
