@@ -1,0 +1,13 @@
+# <type>(<scope>): <short description in English>
+#
+# Types: feat | fix | refactor | chore | docs | test | style | perf | ci
+#
+# Examples:
+#   feat(auth): add google sign-in
+#   fix(cart): correct total price calculation
+#   refactor(db): extract query helpers
+#
+# Rules enforced by commit-msg hook:
+#   - English only (ASCII, no accents)
+#   - Subject must start with an imperative English verb
+#   - Conventional Commits format required

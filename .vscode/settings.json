@@ -11,7 +11,16 @@
     "typescriptreact"
   ],
   "git.allowNoVerifyCommit": false,
-  "editot.codeActonsOnSave": {
+  "git.enableSmartCommit": false,
+  "git.inputValidation": "always",
+  "git.useCommitInputAsStdinArgs": false,
+  "github.copilot.editor.enableAutoCompletions": true,
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "text": "Always write commit messages in English only (ASCII, no accents). Follow Conventional Commits: <type>(<scope>): <description>. Types: feat, fix, refactor, chore, docs, test, style, perf, ci. Use imperative mood, lowercase. Examples: feat(auth): add google sign-in | fix(cart): correct total price calculation."
+    }
+  ],
+  "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   }
 }
