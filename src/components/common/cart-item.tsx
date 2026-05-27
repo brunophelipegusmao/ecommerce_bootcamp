@@ -2,6 +2,9 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import { MinusIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { formatMoney } from "@/helpers/money";
+import { removeProductFromCart } from "@/actions/remove-cart-product";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 interface CartItemProps {
   id: string;
@@ -20,6 +23,26 @@ export default function CartItem({
   productVariantPriceInCents,
   quantity,
 }: CartItemProps) {
+  const removeProductFromCartMutation = useMutation({
+    mutationKey: ["remove-from-cart"],
+    mutationFn: () =>
+      removeProductFromCart({
+        cartItemId: id,
+      }),
+  });
+  const queryClient = useQueryClient();
+  const handleRemoveFromCart = () => {
+    removeProductFromCartMutation.mutate(undefined, {
+      onSuccess: () => {
+        toast.success("Produto removido do carrinho");
+        queryClient.invalidateQueries({ queryKey: ["cart"] });
+      },
+      onError: () => {
+        toast.error("Erro ao remover produto do carrinho");
+      },
+    });
+  };
+
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-2">
@@ -37,7 +60,11 @@ export default function CartItem({
           </p>
           <div className="flex w-20 items-center justify-between rounded-lg border p-1">
             {quantity === 1 ? (
-              <Button className="h-3 w-3" variant="ghost" onClick={() => {}}>
+              <Button
+                className="h-3 w-3"
+                variant="ghost"
+                onClick={handleRemoveFromCart}
+              >
                 <TrashIcon />
               </Button>
             ) : (

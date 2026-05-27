@@ -42,10 +42,8 @@ export default function Cart() {
 
   return (
     <Sheet>
-      <SheetTrigger>
-        <Button variant="outline" size="icon">
-          <ShoppingBasketIcon />
-        </Button>
+      <SheetTrigger render={<Button variant="outline" size="icon" />}>
+        <ShoppingBasketIcon />
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
