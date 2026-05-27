@@ -12,7 +12,7 @@
   ],
   "git.allowNoVerifyCommit": false,
   "git.enableSmartCommit": false,
-  "git.inputValidation": "always",
+  "git.inputValidation": true,
   "git.useCommitInputAsStdinArgs": false,
   "github.copilot.editor.enableAutoCompletions": true,
   "github.copilot.chat.commitMessageGeneration.instructions": [

@@ -4,11 +4,13 @@ import { productTable, productVariantTable } from "../../../db/schema";
 import Header from "@/components/common/header";
 import Image from "next/image";
 import { formatMoney } from "@/helpers/money";
-import { Button } from "@/components/ui/button";
+
 import ProductsList from "@/components/common/produtsList";
 import Footer from "@/components/common/footer";
 import VariantSelector from "../components/variant-selector";
-import QuantitySelector from "../components/quantity-selector";
+
+
+import ProductActions from "../components/product-actions";
 
 interface ProductVariantPageProps {
   params: Promise<{ slug: string }>;
@@ -52,7 +54,10 @@ export default async function ProductVariantPage({
         </div>
         <div className="flex flex-col space-y-2">
           <div className="px-5 text-black/80">
-            <VariantSelector variants={productVariant.product.variants} selectedVariant={productVariant.slug} />
+            <VariantSelector
+              variants={productVariant.product.variants}
+              selectedVariant={productVariant.slug}
+            />
           </div>
           <div className="px-5">
             <h2 className="text-lg font-semibold text-black/80">
@@ -66,17 +71,9 @@ export default async function ProductVariantPage({
             </h3>
           </div>
         </div>
-        <div className="px-5">
-          <QuantitySelector />
-        </div>
-        <div className="flex flex-col space-y-4 px-5">
-          <Button className="rounded-full" variant="outline" size="lg">
-            Comprar agora
-          </Button>
-          <Button className="rounded-full" variant="default" size="lg">
-            Adicionar ao carrinho
-          </Button>
-        </div>
+
+        <ProductActions productVariantId={productVariant.id} />
+
         <div className="px-5">
           <p className="text-sm">{productVariant.product.description}</p>
         </div>
