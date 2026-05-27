@@ -227,7 +227,7 @@ export const cartRelations = relations(cartTable, ({ one, many }) => ({
   items: many(cartItemTable),
 }));
 
-const cartItemTable = pgTable("cart_item", {
+export const cartItemTable = pgTable("cart_item", {
   id: uuid().primaryKey().defaultRandom(),
   cartId: uuid("cart_id")
     .notNull()
