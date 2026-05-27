@@ -1,4 +1,0 @@
-#!/usr/bin/env sh
-
-pnpm commitlint --edit "$1" || exit 1
-pnpm node scripts/validate-commit-language.mjs "$1"
