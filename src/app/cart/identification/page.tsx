@@ -3,7 +3,7 @@ import { db } from "@/db";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
-import { cartTable } from "@/db/schema";
+import { cartTable, shippingAddressTable } from "@/db/schema";
 import Header from "@/components/common/header";
 import Adresses from "./components/addresses";
 
@@ -33,11 +33,15 @@ export default async function IdentificationPage() {
     redirect("/");
   }
 
+  const shippingAddress = await db.query.shippingAddressTable.findMany({
+    where: eq(shippingAddressTable.userId, session.user.id),
+  });
+
   return (
     <>
       <Header />
       <div className="px-5">
-        <Adresses />
+        <Adresses shippingAddress={shippingAddress} />
       </div>
     </>
   );

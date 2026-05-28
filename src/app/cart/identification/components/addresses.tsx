@@ -9,10 +9,16 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 
 import AddressForm from "./address-form";
+import { shippingAddressTable } from "@/db/schema";
 
-export default function Adresses() {
+interface AdressesProps {
+  shippingAddress: typeof shippingAddressTable.$inferSelect[] ;
+}
+
+export default function Adresses({ shippingAddress }: AdressesProps) {
   const [selectedAddress, setSelectedAddress] = useState("");
-  const { data: addresses } = useAddressesQuery();
+  
+  const { data: addresses } = useAddressesQuery({ initialData: shippingAddress });
 
   return (
     <Card className="ring-muted-foreground w-full space-y-2">
@@ -22,7 +28,6 @@ export default function Adresses() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
-        {/* <CardContent> */}
         <RadioGroup
           value={selectedAddress}
           onValueChange={setSelectedAddress}
@@ -69,7 +74,6 @@ export default function Adresses() {
             <AddressForm />
           </div>
         )}
-        {/* </CardContent> */}
       </CardContent>
     </Card>
   );
