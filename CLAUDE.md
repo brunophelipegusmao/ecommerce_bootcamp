@@ -9,6 +9,7 @@ Always write git commit messages in **English** following the **Conventional Com
 Types: `feat`, `fix`, `refactor`, `chore`, `docs`, `test`, `style`, `perf`, `ci`.
 
 Examples:
+
 - `feat(auth): add sign-in with Google`
 - `fix(cart): correct total price calculation`
 - `refactor(db): extract query helpers`
@@ -45,7 +46,7 @@ Always use Context7 MCP to consult documentation before implementing anything wi
 - Always write code in TypeScript.
 - DRY (Don't Repeat Yourself): avoid code duplication. Create reusable functions/components when needed.
 - Do not write unnecessary comments in code.
-- Always use the library "react-number-format" to create inputs with mask
+- Always use the library "react-number-format" to create inputs with mask.
 
 ---
 
@@ -73,6 +74,7 @@ Always use Context7 MCP to consult documentation before implementing anything wi
 ## Database
 
 - Always use `src/db/index.ts` to interact with the database.
+- Always use `scr/db/schema.ts`to know how database is estructured and whats datas alread have.
 
 ## Data Fetching (React Query)
 

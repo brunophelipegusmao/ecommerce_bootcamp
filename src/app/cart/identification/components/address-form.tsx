@@ -8,6 +8,7 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { useCreateAddress } from "@/hooks/mutations/use-create-address";
 
 const formSchema = z.object({
   email: z.email({ message: "E-mail inválido" }),
@@ -48,27 +49,48 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
+const defaultValues: FormValues = {
+  email: "",
+  firstName: "",
+  lastName: "",
+  cpfCnpj: "",
+  phone: "",
+  zipCode: "",
+  address: "",
+  number: "",
+  complement: "",
+  neighborhood: "",
+  city: "",
+  state: "",
+};
+
 export default function AddressForm() {
+  const { mutate: createAddress, isPending } = useCreateAddress();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-      firstName: "",
-      lastName: "",
-      cpfCnpj: "",
-      phone: "",
-      zipCode: "",
-      address: "",
-      number: "",
-      complement: "",
-      neighborhood: "",
-      city: "",
-      state: "",
-    },
+    defaultValues,
   });
 
-  async function onSubmit(values: FormValues) {
-    console.log(values);
+  function onSubmit(values: FormValues) {
+    createAddress(
+      {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        cpfOrCnpj: values.cpfCnpj,
+        phone: values.phone,
+        zipCode: values.zipCode,
+        street: values.address,
+        number: values.number,
+        complement: values.complement,
+        neighborhood: values.neighborhood,
+        city: values.city,
+        state: values.state,
+      },
+      {
+        onSuccess: () => form.reset(defaultValues),
+      },
+    );
   }
 
   return (
@@ -301,8 +323,12 @@ export default function AddressForm() {
         />
       </div>
 
-      <Button type="submit" className="w-full rounded-full">
-        Continuar com o pagamento
+      <Button
+        type="submit"
+        disabled={isPending}
+        className="w-full rounded-full py-3"
+      >
+        {isPending ? "Salvando..." : "Continuar com o pagamento"}
       </Button>
     </form>
   );
