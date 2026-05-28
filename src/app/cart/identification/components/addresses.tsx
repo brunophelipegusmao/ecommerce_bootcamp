@@ -37,10 +37,10 @@ export default function Adresses() {
                     htmlFor={address.id}
                     className="flex min-w-0 cursor-pointer flex-col gap-0.5"
                   >
-                    <span className="text-muted-foreground line-clamp-2 text-sm">
+                    <span className="line-clamp-2 text-sm">
                       {address.street}, {address.number}
                       {address.complement ? ` - ${address.complement}` : ""},{" "}
-                      {address.neighborhood} — {address.city}/{address.state},{" "}
+                      {address.neighborhood} - {address.city}/{address.state},{" "}
                       {address.zipCode}
                     </span>
                   </Label>
