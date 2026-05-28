@@ -5,8 +5,10 @@ import { headers } from "next/headers";
 import { db } from "@/db";
 import { cartTable, cartItemTable } from "@/db/schema";
 import { asc } from "drizzle-orm";
+import { getCartSchema } from "./schema";
 
 export const getCart = async () => {
+  getCartSchema.parse({});
   const sessiion = await auth.api.getSession({
     headers: await headers(),
   });

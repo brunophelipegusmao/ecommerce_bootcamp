@@ -15,61 +15,61 @@ export default function Adresses() {
   const { data: addresses } = useAddressesQuery();
 
   return (
-    <Card>
+    <Card className="ring-muted-foreground w-full space-y-2">
       <CardHeader>
-        <CardTitle>Identificação</CardTitle>
+        <CardTitle className="text-center text-lg font-semibold">
+          Identificação
+        </CardTitle>
       </CardHeader>
-      <CardContent>
-        <Card>
-          <CardContent>
-            <RadioGroup
-              value={selectedAddress}
-              onValueChange={setSelectedAddress}
-              className="w-full"
-            >
-              {addresses?.map((address) => (
-                <Card key={address.id}>
-                  <CardContent>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value={address.id} id={address.id} />
-                      <Label
-                        htmlFor={address.id}
-                        className="flex cursor-pointer flex-col px-2"
-                      >
-                        <span className=" text-sm">
-                          {address.street}, {address.number}
-                          {address.complement ? ` - ${address.complement}` : ""},{" "}
-                          {address.neighborhood} — {address.city}/{address.state},{" "}
-                          {address.zipCode}
-                        </span>
-                      </Label>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-              <Card>
-                <CardContent>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="add_new" id="add_new" />
-                    <Label
-                      htmlFor="add_new"
-                      className="flex cursor-pointer items-center px-2"
-                    >
-                      Adicionar novo endereço
-                    </Label>
-                  </div>
-                </CardContent>
-              </Card>
-            </RadioGroup>
-            {selectedAddress === "add_new" && (
-              <div className="mt-4 flex flex-col gap-4">
-                <Separator />
-                <h2 className="font-semibold">Adicionar novo endereço</h2>
-                <AddressForm />
+      <CardContent className="space-y-2">
+        {/* <CardContent> */}
+        <RadioGroup
+          value={selectedAddress}
+          onValueChange={setSelectedAddress}
+          className="w-full"
+        >
+          {addresses?.map((address) => (
+            <Card key={address.id} className="ring-muted-foreground w-full">
+              <CardContent>
+                <div className="flex w-full items-center gap-3">
+                  <RadioGroupItem value={address.id} id={address.id} />
+                  <Label
+                    htmlFor={address.id}
+                    className="flex min-w-0 cursor-pointer flex-col gap-0.5"
+                  >
+                    <span className="text-muted-foreground line-clamp-2 text-sm">
+                      {address.street}, {address.number}
+                      {address.complement ? ` - ${address.complement}` : ""},{" "}
+                      {address.neighborhood} — {address.city}/{address.state},{" "}
+                      {address.zipCode}
+                    </span>
+                  </Label>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+          <Card>
+            <CardContent>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="add_new" id="add_new" />
+                <Label
+                  htmlFor="add_new"
+                  className="flex cursor-pointer items-center px-2"
+                >
+                  Adicionar novo endereço
+                </Label>
               </div>
-            )}
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </RadioGroup>
+        {selectedAddress === "add_new" && (
+          <div className="mt-4 flex flex-col gap-4">
+            <Separator />
+            <h2 className="font-semibold">Adicionar novo endereço</h2>
+            <AddressForm />
+          </div>
+        )}
+        {/* </CardContent> */}
       </CardContent>
     </Card>
   );

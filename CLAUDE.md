@@ -85,3 +85,5 @@ Always use Context7 MCP to consult documentation before implementing anything wi
 - Always create custom hooks for React Query queries and mutations:
   - Query reference: `src/hooks/queries/user-cart.ts`
   - Mutation reference: `src/hooks/mutations/use-decrease-product-from-cart.ts`
+  - Always create and export a function to return the query key and an query an mutation key of the mutation
+  - ALWAYS use like reference: `src/hooks/queries/user-cart.ts` and `src/hooks/mutations/use-decrease-product-from-cart.ts`
