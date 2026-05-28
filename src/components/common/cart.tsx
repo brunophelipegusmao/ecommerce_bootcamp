@@ -15,6 +15,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Separator } from "../ui/separator";
 import { formatMoney } from "@/helpers/money";
 import { useCartQuery } from "@/hooks/queries/user-cart";
+import Link from "next/link";
 
 function CartItemSkeleton() {
   return (
@@ -92,7 +93,7 @@ export default function Cart() {
                 <p>{formatMoney(cart?.totalPriceInCents ?? 0)}</p>
               </div>
               <Button className="mt-5 w-full rounded-full">
-                Finalizar compra
+                <Link href="/cart/identification">Finalizar compra</Link>
               </Button>
             </div>
           )}
