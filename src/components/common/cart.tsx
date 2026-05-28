@@ -1,6 +1,5 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import { Button } from "../ui/button";
 import {
   Sheet,
@@ -10,13 +9,12 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 import { ShoppingBasketIcon } from "lucide-react";
-import { getCart } from "@/actions/get-cart";
-import Image from "next/image";
 import CartItem from "./cart-item";
 import { Skeleton } from "../ui/skeleton";
 import { ScrollArea } from "../ui/scroll-area";
 import { Separator } from "../ui/separator";
 import { formatMoney } from "@/helpers/money";
+import { useCartQuery } from "@/hooks/queries/user-cart";
 
 function CartItemSkeleton() {
   return (
@@ -35,10 +33,7 @@ function CartItemSkeleton() {
 }
 
 export default function Cart() {
-  const { data: cart, isPending: cartIsPending } = useQuery({
-    queryKey: ["cart"],
-    queryFn: () => getCart(),
-  });
+  const { data: cart, isPending: cartIsPending } = useCartQuery();
 
   return (
     <Sheet>
@@ -96,7 +91,7 @@ export default function Cart() {
                 <p>TOTAL</p>
                 <p>{formatMoney(cart?.totalPriceInCents ?? 0)}</p>
               </div>
-              <Button className="w-full rounded-full mt-5">
+              <Button className="mt-5 w-full rounded-full">
                 Finalizar compra
               </Button>
             </div>

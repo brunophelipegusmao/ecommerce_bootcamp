@@ -2,12 +2,11 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import { MinusIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { formatMoney } from "@/helpers/money";
-import { removeProductFromCart } from "@/actions/remove-cart-product";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { decreaseCartProduct } from "@/actions/decrease-cart-product";
-import { addProductToCart } from "@/actions/add-cart-product";
-
+import { useRemoveProductFromCart } from "@/hooks/mutations/use-remove-product-from-cart";
+import { useDecreaseCartProduct } from "@/hooks/mutations/use-decrease-product-from-cart";
+import { useIncreaseCartProduct } from "@/hooks/mutations/use-increase-product-from-cart";
 interface CartItemProps {
   id: string;
   productName: string;
@@ -27,28 +26,11 @@ export default function CartItem({
   productVariantPriceInCents,
   quantity,
 }: CartItemProps) {
-  const removeProductFromCartMutation = useMutation({
-    mutationKey: ["remove-from-cart"],
-    mutationFn: () =>
-      removeProductFromCart({
-        cartItemId: id,
-      }),
-  });
-  const decreaseCartProductMutation = useMutation({
-    mutationKey: ["decrease-cart-product"],
-    mutationFn: () =>
-      decreaseCartProduct({
-        cartItemId: id,
-      }),
-  });
+  const removeProductFromCartMutation = useRemoveProductFromCart(id);
 
-  const addProductToCartMutation = useMutation({
-    mutationKey: ["add-to-cart"],
-    mutationFn: () => addProductToCart({
-      productVariantId: productVariantId,
-      quantity: 1,
-    }),
-  });
+  const decreaseCartProductMutation = useDecreaseCartProduct(id);
+
+  const addProductToCartMutation = useIncreaseCartProduct(productVariantId);
 
   const queryClient = useQueryClient();
 
@@ -84,7 +66,7 @@ export default function CartItem({
         toast.error("Erro ao atualizar quantidade do produto");
       },
     });
-  }
+  };
 
   return (
     <div className="flex items-center justify-between">
@@ -111,12 +93,20 @@ export default function CartItem({
                 <TrashIcon />
               </Button>
             ) : (
-              <Button className="h-3 w-3" variant="ghost" onClick={handleDecreaseCartProduct}>
+              <Button
+                className="h-3 w-3"
+                variant="ghost"
+                onClick={handleDecreaseCartProduct}
+              >
                 <MinusIcon />
               </Button>
             )}
             <span className="text-xs font-medium">{quantity}</span>
-            <Button className="h-3 w-3" variant="ghost" onClick={handleIncreaseCartProduct}>
+            <Button
+              className="h-3 w-3"
+              variant="ghost"
+              onClick={handleIncreaseCartProduct}
+            >
               <PlusIcon />
             </Button>
           </div>
