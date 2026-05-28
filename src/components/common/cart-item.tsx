@@ -6,10 +6,12 @@ import { removeProductFromCart } from "@/actions/remove-cart-product";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { decreaseCartProduct } from "@/actions/decrease-cart-product";
+import { addProductToCart } from "@/actions/add-cart-product";
 
 interface CartItemProps {
   id: string;
   productName: string;
+  productVariantId: string;
   productVariantName: string;
   productVariantImageUrl: string;
   productVariantPriceInCents: number;
@@ -19,6 +21,7 @@ interface CartItemProps {
 export default function CartItem({
   id,
   productName,
+  productVariantId,
   productVariantName,
   productVariantImageUrl,
   productVariantPriceInCents,
@@ -37,6 +40,14 @@ export default function CartItem({
       decreaseCartProduct({
         cartItemId: id,
       }),
+  });
+
+  const addProductToCartMutation = useMutation({
+    mutationKey: ["add-to-cart"],
+    mutationFn: () => addProductToCart({
+      productVariantId: productVariantId,
+      quantity: 1,
+    }),
   });
 
   const queryClient = useQueryClient();
@@ -63,6 +74,17 @@ export default function CartItem({
       },
     });
   };
+
+  const handleIncreaseCartProduct = () => {
+    addProductToCartMutation.mutate(undefined, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["cart"] });
+      },
+      onError: () => {
+        toast.error("Erro ao atualizar quantidade do produto");
+      },
+    });
+  }
 
   return (
     <div className="flex items-center justify-between">
@@ -94,7 +116,7 @@ export default function CartItem({
               </Button>
             )}
             <span className="text-xs font-medium">{quantity}</span>
-            <Button className="h-3 w-3" variant="ghost" onClick={() => {}}>
+            <Button className="h-3 w-3" variant="ghost" onClick={handleIncreaseCartProduct}>
               <PlusIcon />
             </Button>
           </div>
