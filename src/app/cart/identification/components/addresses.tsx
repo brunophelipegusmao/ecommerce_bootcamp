@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { useAddressesQuery } from "@/hooks/queries/user-addresses";
@@ -14,13 +15,18 @@ import { Separator } from "@/components/ui/separator";
 import AddressForm from "./address-form";
 import { shippingAddressTable } from "@/db/schema";
 import { getCart } from "@/actions/get-cart";
+import { formatAddress } from "@/helpers/address";
 
 interface AdressesProps {
   shippingAddress: (typeof shippingAddressTable.$inferSelect)[];
   initialCart: Awaited<ReturnType<typeof getCart>>;
 }
 
-export default function Adresses({ shippingAddress, initialCart }: AdressesProps) {
+export default function Adresses({
+  shippingAddress,
+  initialCart,
+}: AdressesProps) {
+  const router = useRouter();
   const [selectedAddress, setSelectedAddress] = useState("");
 
   const { data: addresses } = useAddressesQuery({
@@ -35,6 +41,7 @@ export default function Adresses({ shippingAddress, initialCart }: AdressesProps
 
   function handleGoToPayment() {
     updateCartShippingAddress({ shippingAddressId: selectedAddress });
+    router.push("/cart/confirmation");
   }
 
   useEffect(() => {
@@ -66,11 +73,7 @@ export default function Adresses({ shippingAddress, initialCart }: AdressesProps
                     className="flex min-w-0 cursor-pointer flex-col gap-0.5"
                   >
                     <span className="line-clamp-2 text-sm">
-                      {address.street}, {address.number}
-                      {address.complement
-                        ? ` - ${address.complement}`
-                        : ""}, {address.neighborhood} - {address.city}/
-                      {address.state}, {address.zipCode}
+                      {formatAddress(address)}
                     </span>
                   </Label>
                 </div>
