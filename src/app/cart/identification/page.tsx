@@ -7,6 +7,8 @@ import { shippingAddressTable } from "@/db/schema";
 import { getCart } from "@/actions/get-cart";
 import Header from "@/components/common/header";
 import Adresses from "./components/addresses";
+import CartSummary from "../components/cart-summary";
+import Footer from "@/components/common/footer";
 
 export default async function IdentificationPage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -25,12 +27,34 @@ export default async function IdentificationPage() {
     where: eq(shippingAddressTable.userId, session.user.id),
   });
 
+  const cartTotalInCents = cart.items.reduce(
+    (acc, item) => acc + item.productVariant.priceInCents * item.quantity,
+    0,
+  );
   return (
-    <>
+    <div>
       <Header />
-      <div className="px-5">
+
+      <div className="space-y-4 px-5">
         <Adresses shippingAddress={shippingAddress} initialCart={cart} />
+
+        <CartSummary
+          subtotalInCents={cartTotalInCents}
+          shippingInCents={0}
+          totalInCents={cartTotalInCents}
+          products={cart.items.map((item) => ({
+            id: item.productVariant.id,
+            name: item.productVariant.product.name,
+            variantName: item.productVariant.name,
+            priceInCents: item.productVariant.priceInCents,
+            quantity: item.quantity,
+            imageUrl: item.productVariant.imageUrl,
+          }))}
+        />
       </div>
-    </>
+      <div className="mt-8">
+        <Footer />
+      </div>
+    </div>
   );
 }
