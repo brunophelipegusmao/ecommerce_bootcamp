@@ -5,6 +5,7 @@ import { shippingAddressTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { CreateAddressInput, createAddressSchema } from "./schema";
+import { revalidatePath } from "next/cache";
 
 export async function createAddress(data: CreateAddressInput) {
   createAddressSchema.parse(data);
@@ -35,6 +36,8 @@ export async function createAddress(data: CreateAddressInput) {
       country: "BR",
     })
     .returning();
+
+    revalidatePath("/cart/identification");
 
   return address;
 }

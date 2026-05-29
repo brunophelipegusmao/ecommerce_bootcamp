@@ -3,7 +3,8 @@ import { db } from "@/db";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
-import { cartTable, shippingAddressTable } from "@/db/schema";
+import { shippingAddressTable } from "@/db/schema";
+import { getCart } from "@/actions/get-cart";
 import Header from "@/components/common/header";
 import Adresses from "./components/addresses";
 
@@ -14,22 +15,9 @@ export default async function IdentificationPage() {
     redirect("/login");
   }
 
-  const cart = await db.query.cartTable.findFirst({
-    where: eq(cartTable.userId, session?.user?.id),
-    with: {
-      items: {
-        with: {
-          productVariant: {
-            with: {
-              product: true,
-            },
-          },
-        },
-      },
-    },
-  });
+  const cart = await getCart();
 
-  if (!cart || cart.items.length === 0) {
+  if (cart.items.length === 0) {
     redirect("/");
   }
 
@@ -41,7 +29,7 @@ export default async function IdentificationPage() {
     <>
       <Header />
       <div className="px-5">
-        <Adresses shippingAddress={shippingAddress} />
+        <Adresses shippingAddress={shippingAddress} initialCart={cart} />
       </div>
     </>
   );

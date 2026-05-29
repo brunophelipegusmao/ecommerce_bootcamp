@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useCreateAddress } from "@/hooks/mutations/use-create-address";
+import { useUpdateCartShippingAddress } from "@/hooks/mutations/use-update-cart-shipping-address";
 
 const formSchema = z.object({
   email: z.email({ message: "E-mail inválido" }),
@@ -64,8 +65,14 @@ const defaultValues: FormValues = {
   state: "",
 };
 
-export default function AddressForm() {
+interface AddressFormProps {
+  onAddressCreated?: (shippingAddressId: string) => void;
+}
+
+export default function AddressForm({ onAddressCreated }: AddressFormProps) {
   const { mutate: createAddress, isPending } = useCreateAddress();
+  const { mutate: updateCartShippingAddress, isPending: isUpdatingCart } =
+    useUpdateCartShippingAddress();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues,
@@ -88,7 +95,11 @@ export default function AddressForm() {
         state: values.state,
       },
       {
-        onSuccess: () => form.reset(defaultValues),
+        onSuccess: (address) => {
+          form.reset(defaultValues);
+          updateCartShippingAddress({ shippingAddressId: address.id });
+          onAddressCreated?.(address.id);
+        },
       },
     );
   }
@@ -325,11 +336,14 @@ export default function AddressForm() {
 
       <Button
         type="submit"
-        disabled={isPending}
+        disabled={isPending || isUpdatingCart}
         className="w-full rounded-full py-3"
       >
-        {isPending ? "Salvando..." : "Salvar endereço"}
+        {isPending || isUpdatingCart ? "Salvando..." : "Salvar endereço"}
       </Button>
     </form>
   );
+}
+function useCart(): { data: any } {
+  throw new Error("Function not implemented.");
 }

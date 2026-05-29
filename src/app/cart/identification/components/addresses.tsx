@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import { useAddressesQuery } from "@/hooks/queries/user-addresses";
+import { useCartQuery } from "@/hooks/queries/user-cart";
+import { useUpdateCartShippingAddress } from "@/hooks/mutations/use-update-cart-shipping-address";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -10,15 +13,35 @@ import { Separator } from "@/components/ui/separator";
 
 import AddressForm from "./address-form";
 import { shippingAddressTable } from "@/db/schema";
+import { getCart } from "@/actions/get-cart";
 
 interface AdressesProps {
-  shippingAddress: typeof shippingAddressTable.$inferSelect[] ;
+  shippingAddress: (typeof shippingAddressTable.$inferSelect)[];
+  initialCart: Awaited<ReturnType<typeof getCart>>;
 }
 
-export default function Adresses({ shippingAddress }: AdressesProps) {
+export default function Adresses({ shippingAddress, initialCart }: AdressesProps) {
   const [selectedAddress, setSelectedAddress] = useState("");
-  
-  const { data: addresses } = useAddressesQuery({ initialData: shippingAddress });
+
+  const { data: addresses } = useAddressesQuery({
+    initialData: shippingAddress,
+  });
+  const { data: cart } = useCartQuery({ initialData: initialCart });
+  const { mutate: updateCartShippingAddress, isPending } =
+    useUpdateCartShippingAddress();
+
+  const hasExistingAddressSelected =
+    selectedAddress !== "" && selectedAddress !== "add_new";
+
+  function handleGoToPayment() {
+    updateCartShippingAddress({ shippingAddressId: selectedAddress });
+  }
+
+  useEffect(() => {
+    if (cart?.shippingAddress?.id) {
+      setSelectedAddress(cart.shippingAddress.id);
+    }
+  }, [cart]);
 
   return (
     <Card className="ring-muted-foreground w-full space-y-2">
@@ -44,9 +67,10 @@ export default function Adresses({ shippingAddress }: AdressesProps) {
                   >
                     <span className="line-clamp-2 text-sm">
                       {address.street}, {address.number}
-                      {address.complement ? ` - ${address.complement}` : ""},{" "}
-                      {address.neighborhood} - {address.city}/{address.state},{" "}
-                      {address.zipCode}
+                      {address.complement
+                        ? ` - ${address.complement}`
+                        : ""}, {address.neighborhood} - {address.city}/
+                      {address.state}, {address.zipCode}
                     </span>
                   </Label>
                 </div>
@@ -67,11 +91,21 @@ export default function Adresses({ shippingAddress }: AdressesProps) {
             </CardContent>
           </Card>
         </RadioGroup>
+        {hasExistingAddressSelected && (
+          <Button
+            type="button"
+            onClick={handleGoToPayment}
+            disabled={isPending}
+            className="mt-4 w-full rounded-full py-3"
+          >
+            {isPending ? "Processando..." : "Ir para pagamento"}
+          </Button>
+        )}
         {selectedAddress === "add_new" && (
           <div className="mt-4 flex flex-col gap-4">
             <Separator />
             <h2 className="font-semibold">Adicionar novo endereço</h2>
-            <AddressForm />
+            <AddressForm onAddressCreated={setSelectedAddress} />
           </div>
         )}
       </CardContent>
