@@ -328,7 +328,7 @@ export default function AddressForm() {
         disabled={isPending}
         className="w-full rounded-full py-3"
       >
-        {isPending ? "Salvando..." : "Continuar com o pagamento"}
+        {isPending ? "Salvando..." : "Salvar endereço"}
       </Button>
     </form>
   );
