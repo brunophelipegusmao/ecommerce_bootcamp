@@ -32,7 +32,7 @@ export default async function IdentificationPage() {
     0,
   );
   return (
-    <div>
+    <div className="space-y-4">
       <Header />
 
       <div className="space-y-4 px-5">
