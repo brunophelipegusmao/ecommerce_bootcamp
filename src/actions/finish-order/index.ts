@@ -3,7 +3,12 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { db } from "@/db";
-import { cartItemTable, cartTable, orderItemTable, orderTable } from "@/db/schema";
+import {
+  cartItemTable,
+  cartTable,
+  orderItemTable,
+  orderTable,
+} from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export const finishOrder = async () => {
@@ -41,10 +46,24 @@ export const finishOrder = async () => {
   );
 
   await db.transaction(async (tx) => {
+    if (!cart.shippingAddress) {
+      throw new Error("Shipping address not found");
+    }
     const [order] = await tx
       .insert(orderTable)
       .values({
-        ...cart.shippingAddress!,
+        recipentName: cart.shippingAddress.recipentName,
+        email: cart.shippingAddress.email,
+        zipCode: cart.shippingAddress.zipCode,
+        country: cart.shippingAddress.country,
+        phone: cart.shippingAddress.phone,
+        cpfOrCnpj: cart.shippingAddress.cpfOrCnpj,
+        city: cart.shippingAddress.city,
+        complement: cart.shippingAddress.complement,
+        neighborhood: cart.shippingAddress.neighborhood,
+        number: cart.shippingAddress.number,
+        state: cart.shippingAddress.state,
+        street: cart.shippingAddress.street,
         userId: session.user.id!,
         totalPriceInCents,
         shippingAddressId: cart.shippingAddress!.id,

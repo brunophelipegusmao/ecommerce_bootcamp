@@ -13,17 +13,25 @@ import { useFinishOrder } from "@/hooks/mutations/use-finish-order";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function FinishOrderButton() {
-  const [successDialogOpen, setSuccessDialogOpen] = useState(true);
+  const [successDialogOpen, setSuccessDialogOpen] = useState(false);
   const finishOrderMutation = useFinishOrder();
+  const handleFinishOrder = () => {
+    finishOrderMutation.mutate(undefined, {
+      onSuccess: () => setSuccessDialogOpen(true),
+      onError: () =>
+        toast.error("Não foi possível finalizar o pedido. Tente novamente."),
+    });
+  };
 
   return (
     <>
       <Button
         className="w-full rounded-full py-3"
         size="lg"
-        onClick={() => finishOrderMutation.mutate()}
+        onClick={handleFinishOrder}
         disabled={finishOrderMutation.isPending}
       >
         {finishOrderMutation.isPending && (
@@ -39,6 +47,7 @@ export default function FinishOrderButton() {
             alt="Finished Order"
             width={200}
             height={200}
+            className="h-auto"
           />
           <DialogHeader>
             <DialogTitle className="text-center text-xl">
@@ -47,29 +56,29 @@ export default function FinishOrderButton() {
             <DialogDescription className="text-center">
               Seu pedido foi efetuado com sucesso. Você pode acompanhar o status
               na seção de "Meus Pedidos".
-              <DialogFooter>
-                <Button
-                  variant="outline"
-                  className="w-full py-5 rounded-full font-medium"
-                  size="lg"
-                  onClick={() => {
-                    window.location.href = "/";
-                  }}
-                >
-                  Pagina Inicial
-                </Button>
-                <Button
-                  className="w-full py-5 rounded-full font-medium"
-                  size="lg"
-                  onClick={() => {
-                    window.location.href = "/orders";
-                  }}
-                >
-                  Ver meus pedidos
-                </Button>
-              </DialogFooter>
             </DialogDescription>
           </DialogHeader>
+          <DialogFooter className="w-full bg-transparent">
+            <Button
+              variant="outline"
+              className="w-full rounded-full py-5 font-medium"
+              size="lg"
+              onClick={() => {
+                window.location.href = "/";
+              }}
+            >
+              Página Inicial
+            </Button>
+            <Button
+              className="w-full rounded-full py-5 font-medium"
+              size="lg"
+              onClick={() => {
+                window.location.href = "/orders";
+              }}
+            >
+              Ver meus pedidos
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </>
