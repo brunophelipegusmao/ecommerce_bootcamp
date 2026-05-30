@@ -1,8 +1,7 @@
 "use client";
 
-import { addProductToCart } from "@/actions/add-cart-product";
 import { Button } from "@/components/ui/button";
-import { useMutation, QueryClient } from '@tanstack/react-query';
+import { useIncreaseCartProduct } from "@/hooks/mutations/use-increase-product-from-cart";
 import { Loader2 } from "lucide-react";
 
 interface AddToCartButtonProps {
@@ -14,29 +13,16 @@ export default function AddToCartButton({
   productVariantId,
   quantity,
 }: AddToCartButtonProps) {
-  const queryClient = new QueryClient();
-  const { mutate, isPending } = useMutation({
-    mutationKey: ["addProductToCart", productVariantId, quantity],
-    mutationFn: () =>
-      addProductToCart({
-        productVariantId,
-        quantity,
-      }),
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["cart"] });
-      }
-  });
+  const { mutate, isPending } = useIncreaseCartProduct(productVariantId);
   return (
     <Button
       className="rounded-full"
       variant="default"
       size="lg"
       disabled={isPending}
-      onClick={() => mutate()}
+      onClick={() => mutate(quantity)}
     >
-        {isPending && (
-            <Loader2 className="animate-spin" />
-        )}
+      {isPending && <Loader2 className="animate-spin" />}
       Adicionar ao carrinho
     </Button>
   );

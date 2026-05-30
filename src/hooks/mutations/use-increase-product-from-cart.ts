@@ -9,10 +9,10 @@ export const useIncreaseCartProduct = (productVariantId: string) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: getIncreaseCartProductMutationKey(productVariantId),
-    mutationFn: () =>
+    mutationFn: (quantity: number = 1) =>
       addProductToCart({
-        productVariantId: productVariantId,
-        quantity: 1,
+        productVariantId,
+        quantity,
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: getUserCartQueryKey() });
