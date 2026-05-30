@@ -80,6 +80,7 @@ export const finishOrder = async () => {
         priceInCents: item.productVariant.priceInCents,
       }));
     await tx.insert(orderItemTable).values(orderitemsPayload);
+    await tx.delete(cartTable).where(eq(cartTable.id, cart.id));
     await tx.delete(cartItemTable).where(eq(cartItemTable.cartId, cart.id));
   });
 };
