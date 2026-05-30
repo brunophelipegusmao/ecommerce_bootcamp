@@ -7,7 +7,8 @@ import { redirect } from "next/navigation";
 import { getCart } from "@/actions/get-cart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatAddress } from "@/helpers/address";
-import { Button } from "@/components/ui/button";
+
+import FinishOrderButton from "../components/finish-order-button";
 
 export default async function ConfirmationPage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -62,12 +63,7 @@ export default async function ConfirmationPage() {
                   )}
                 </CardContent>
               </Card>
-              <Button
-              className="w-full rounded-full py-3"
-              size="lg"
-              >
-                Finalizar Compra
-              </Button>
+              <FinishOrderButton />
             </CardContent>
           </Card>
 

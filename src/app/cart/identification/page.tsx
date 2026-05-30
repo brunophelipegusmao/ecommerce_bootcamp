@@ -6,9 +6,10 @@ import { auth } from "@/lib/auth";
 import { shippingAddressTable } from "@/db/schema";
 import { getCart } from "@/actions/get-cart";
 import Header from "@/components/common/header";
-import Adresses from "./components/addresses";
+
 import CartSummary from "../components/cart-summary";
 import Footer from "@/components/common/footer";
+import Adresses from "../components/addresses";
 
 export default async function IdentificationPage() {
   const session = await auth.api.getSession({ headers: await headers() });

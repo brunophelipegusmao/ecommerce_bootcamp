@@ -12,10 +12,11 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 
-import AddressForm from "./address-form";
+
 import { shippingAddressTable } from "@/db/schema";
 import { getCart } from "@/actions/get-cart";
 import { formatAddress } from "@/helpers/address";
+import AddressForm from "./address-form";
 
 interface AdressesProps {
   shippingAddress: (typeof shippingAddressTable.$inferSelect)[];
