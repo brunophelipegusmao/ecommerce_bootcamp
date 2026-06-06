@@ -7,13 +7,15 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { orderTable } from "@/db/schema";
 
 interface OrdersProps {
   orders: Array<{
     id: string;
     totalPriceInCents: number;
-    status: string;
+    status: (typeof orderTable.$inferSelect)["status"];
     createdAt: Date;
     items: Array<{
       id: string;
@@ -35,8 +37,18 @@ export default function Orders({ orders }: OrdersProps) {
             <Accordion type="single" collapsible key={order.id}>
               <AccordionItem value={order.id}>
                 <AccordionTrigger>
-                  Pedido feito em{" "}
-                  {new Date(order.createdAt).toLocaleDateString("pt-BR")}
+                  <div className="flex flex-col items-start gap-2">
+                    <p>
+                      Pedido feito em{" "}
+                      {new Date(order.createdAt).toLocaleDateString("pt-BR")}
+                    </p>
+                  <div className="flex items-center gap-2">
+                    {order.status === "pending" && <Badge variant="default">Processando</Badge>}
+                    {order.status === "paid" && <Badge variant="secondary">Pago</Badge>}
+                    {order.status === "canceled" && <Badge variant="destructive">Cancelado</Badge>}
+                    <Badge variant="outline">Em trânsito</Badge>
+                  </div>
+                  </div>
                 </AccordionTrigger>
                 <AccordionContent>
                   <CartSummary
